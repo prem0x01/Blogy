@@ -14,7 +14,7 @@ type Database struct {
 	*sql.DB
 }
 
-// Configuration for the database
+
 type Config struct {
 	MaxOpenConns    int
 	MaxIdleConns    int
@@ -22,25 +22,22 @@ type Config struct {
 	ConnMaxIdleTime time.Duration
 }
 
-// NewDatabase creates a new database connection
+
 func NewDatabase(dbPath string, config *Config) (*Database, error) {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("error opening database: %w", err)
 	}
 
-	// Set connection pool settings
 	db.SetMaxOpenConns(config.MaxOpenConns)
 	db.SetMaxIdleConns(config.MaxIdleConns)
 	db.SetConnMaxLifetime(config.ConnMaxLifetime)
 	db.SetConnMaxIdleTime(config.ConnMaxIdleTime)
 
-	// Test the connection
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("error connecting to the database: %w", err)
 	}
 
-	// Initialize the database schema
 	if err := initializeSchema(db); err != nil {
 		return nil, fmt.Errorf("error initializing schema: %w", err)
 	}
@@ -48,7 +45,6 @@ func NewDatabase(dbPath string, config *Config) (*Database, error) {
 	return &Database{db}, nil
 }
 
-// Transaction wrapper
 func (db *Database) WithTx(fn func(*sql.Tx) error) error {
 	tx, err := db.Begin()
 	if err != nil {
@@ -70,9 +66,7 @@ func (db *Database) WithTx(fn func(*sql.Tx) error) error {
 	return tx.Commit()
 }
 
-// Initialize database schema
 func initializeSchema(db *sql.DB) error {
-	// First, enable foreign keys and set pragmas
 	pragmas := []string{
 		"PRAGMA foreign_keys = ON;",
 		"PRAGMA journal_mode = WAL;",
@@ -87,7 +81,6 @@ func initializeSchema(db *sql.DB) error {
 		}
 	}
 
-	// Create tables in correct order
 	tables := []string{
 		`CREATE TABLE IF NOT EXISTS users (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -142,14 +135,12 @@ func initializeSchema(db *sql.DB) error {
 		);`,
 	}
 
-	// Create tables
 	for _, table := range tables {
 		if _, err := db.Exec(table); err != nil {
 			return fmt.Errorf("error creating table: %w", err)
 		}
 	}
 
-	// Create indexes
 	indexes := []string{
 		"CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts(user_id);",
 		"CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);",
@@ -162,14 +153,12 @@ func initializeSchema(db *sql.DB) error {
 		"CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);",
 	}
 
-	// Create indexes
 	for _, index := range indexes {
 		if _, err := db.Exec(index); err != nil {
 			return fmt.Errorf("error creating index: %w", err)
 		}
 	}
 
-	// Create triggers
 	triggers := []string{
 		`CREATE TRIGGER IF NOT EXISTS update_user_timestamp 
 		AFTER UPDATE ON users
@@ -185,7 +174,6 @@ func initializeSchema(db *sql.DB) error {
 		END;`,
 	}
 
-	// Create triggers
 	for _, trigger := range triggers {
 		if _, err := db.Exec(trigger); err != nil {
 			return fmt.Errorf("error creating trigger: %w", err)
@@ -195,7 +183,6 @@ func initializeSchema(db *sql.DB) error {
 	return nil
 }
 
-// Helper methods for common database operations
 func (db *Database) GetUserByID(id int64) (*models.User, error) {
 	user := &models.User{}
 	err := db.QueryRow(`
@@ -217,4 +204,3 @@ func (db *Database) GetUserByID(id int64) (*models.User, error) {
 	return user, err
 }
 
-// Add more helper methods as needed...

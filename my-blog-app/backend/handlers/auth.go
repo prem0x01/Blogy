@@ -31,13 +31,11 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Validate input
 	if err := utils.Validate.Struct(input); err != nil {
 		utils.ErrorResponse(c, http.StatusBadRequest, utils.FormatValidationErrors(err))
 		return
 	}
 
-	// Check if user exists
 	exists, err := h.checkUserExists(input.Email, input.Username)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Database error")
@@ -48,7 +46,6 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Create user
 	user := &models.User{
 		Username:  input.Username,
 		Email:     input.Email,
@@ -56,19 +53,16 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		UpdatedAt: time.Now(),
 	}
 
-	// Hash password
 	if err := user.SetPassword(input.Password); err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Password hashing failed")
 		return
 	}
 
-	// Save user to database
 	if err := h.createUser(user); err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create user")
 		return
 	}
 
-	// Generate tokens
 	accessToken, refreshToken, err := h.generateTokenPair(user.ID)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Token generation failed")
@@ -95,7 +89,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Get user by email
 	user, err := h.getUserByEmail(input.Email)
 	if err == sql.ErrNoRows {
 		utils.ErrorResponse(c, http.StatusUnauthorized, "Invalid credentials")
@@ -105,13 +98,11 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Check password
 	if !user.CheckPassword(input.Password) {
 		utils.ErrorResponse(c, http.StatusUnauthorized, "Invalid credentials")
 		return
 	}
 
-	// Generate tokens
 	accessToken, refreshToken, err := h.generateTokenPair(user.ID)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Token generation failed")
@@ -137,7 +128,6 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	// Parse and validate refresh token
 	token, err := jwt.Parse(input.RefreshToken, func(token *jwt.Token) (interface{}, error) {
 		return []byte(h.jwtSecret), nil
 	})
@@ -161,7 +151,6 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	// Generate new token pair
 	accessToken, refreshToken, err := h.generateTokenPair(userID)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Token generation failed")
@@ -176,9 +165,7 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	})
 }
 
-// Helper methods
 func (h *AuthHandler) generateTokenPair(userID int64) (string, string, error) {
-	// Generate access token
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
 		"type":    "access",
@@ -190,7 +177,6 @@ func (h *AuthHandler) generateTokenPair(userID int64) (string, string, error) {
 		return "", "", err
 	}
 
-	// Generate refresh token
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
 		"type":    "refresh",
@@ -205,7 +191,6 @@ func (h *AuthHandler) generateTokenPair(userID int64) (string, string, error) {
 	return accessTokenString, refreshTokenString, nil
 }
 
-// Database helper methods
 func (h *AuthHandler) checkUserExists(email, username string) (bool, error) {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM users WHERE email = ? OR username = ?)`
@@ -255,3 +240,4 @@ func (h *AuthHandler) getUserByEmail(email string) (*models.User, error) {
 	)
 	return user, err
 }
+

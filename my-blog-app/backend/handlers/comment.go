@@ -77,7 +77,7 @@ func (h *CommentHandler) DeleteComment(c *gin.Context) {
 
 	userID := c.GetInt64("user_id")
 
-	// Check ownership
+	
 	comment, err := h.getCommentByID(commentID)
 	if err == sql.ErrNoRows {
 		utils.ErrorResponse(c, http.StatusNotFound, "Comment not found")
@@ -100,7 +100,7 @@ func (h *CommentHandler) DeleteComment(c *gin.Context) {
 	utils.SuccessResponse(c, gin.H{"message": "Comment deleted successfully"})
 }
 
-// Database helper methods
+
 func (h *CommentHandler) getComments(postID int64, limit, offset int) ([]*models.Comment, int64, error) {
 	var total int64
 	if err := h.db.QueryRow("SELECT COUNT(*) FROM comments WHERE post_id = ?", postID).Scan(&total); err != nil {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import BlogList from '../components/BlogList';
+import BlogList from '../components/blog/BlogList';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);

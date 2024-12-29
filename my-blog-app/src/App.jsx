@@ -12,14 +12,12 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 // Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Register from './pages/Register';
-import CreatePost from './pages/CreatePost';
-import BlogPost from './pages/BlogPost';
+import Register from './pages/Signup';
+import CreatePost from './pages/CreateBlog';
+import BlogPost from './pages/BlogDetails';
 
 // Components
-import Header from './components/Header';
-
-// Protected Route Component
+import Header from './components/layout/Header';
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();

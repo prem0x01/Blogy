@@ -12,26 +12,23 @@ var Validate *validator.Validate
 func init() {
 	Validate = validator.New()
 
-	// Custom validation rules
 	Validate.RegisterValidation("password", validatePassword)
 	Validate.RegisterValidation("username", validateUsername)
 }
 
 func validatePassword(fl validator.FieldLevel) bool {
 	password := fl.Field().String()
-	// At least 8 characters, 1 uppercase, 1 lowercase, 1 number
+
 	match, _ := regexp.MatchString(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$`, password)
 	return match
 }
 
 func validateUsername(fl validator.FieldLevel) bool {
 	username := fl.Field().String()
-	// 3-20 characters, letters, numbers, underscores
 	match, _ := regexp.MatchString(`^[a-zA-Z0-9_]{3,20}$`, username)
 	return match
 }
 
-// Helper function to format validation errors
 func FormatValidationErrors(err error) string {
 	if validationErrors, ok := err.(validator.ValidationErrors); ok {
 		var errorMessages []string
@@ -61,3 +58,4 @@ func FormatValidationErrors(err error) string {
 	}
 	return "validation error"
 }
+

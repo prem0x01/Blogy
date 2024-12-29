@@ -51,7 +51,7 @@ func (h *PostHandler) GetPost(c *gin.Context) {
 		return
 	}
 
-	// Get comments for the post
+	
 	comments, err := h.getPostComments(id)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to fetch comments")
@@ -69,7 +69,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt64("user_id") // From auth middleware
+	userID := c.GetInt64("user_id") 
 
 	post := &models.Post{
 		UserID:    userID,
@@ -100,7 +100,7 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt64("user_id") // From auth middleware
+	userID := c.GetInt64("user_id") 
 
 	post := &models.Post{
 		ID:        id,
@@ -129,7 +129,7 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt64("user_id") // From auth middleware
+	userID := c.GetInt64("user_id") 
 
 	if err := h.deletePost(postID, userID); err != nil {
 		if err == sql.ErrNoRows {
@@ -143,7 +143,7 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 	utils.SuccessResponse(c, gin.H{"message": "Post deleted successfully"})
 }
 
-// Database helper methods
+
 func (h *PostHandler) getPosts(limit, offset int) ([]*models.Post, int64, error) {
 	var total int64
 	err := h.db.QueryRow("SELECT COUNT(*) FROM posts WHERE status = 'published'").Scan(&total)

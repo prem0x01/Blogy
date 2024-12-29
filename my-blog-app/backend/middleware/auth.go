@@ -20,7 +20,7 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 			return
 		}
 
-		// Extract token from Bearer scheme
+		
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
 			utils.ErrorResponse(c, http.StatusUnauthorized, "Invalid authorization header format")
@@ -30,7 +30,7 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 
 		tokenString := parts[1]
 
-		// Parse and validate token
+		
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -45,7 +45,7 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		}
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			// Add user ID to context
+			
 			c.Set("user_id", int64(claims["user_id"].(float64)))
 			c.Next()
 		} else {

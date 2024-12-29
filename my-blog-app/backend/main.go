@@ -37,10 +37,9 @@ func init() {
 }
 
 func main() {
-	// Load configuration
+
 	cfg := config.Load()
 
-	// Initialize database
 	dbConfig := &database.Config{
 		MaxOpenConns:    25,
 		MaxIdleConns:    25,
@@ -54,33 +53,27 @@ func main() {
 	}
 	defer db.Close()
 
-	// Run database migrations
 	if err := migrations.RunMigrations(db.DB); err != nil {
 		logger.Fatal("Failed to run migrations", zap.Error(err))
 	}
 
-	// Initialize router
 	router := setupRouter(cfg, db, logger)
 
-	// Create server
 	srv := &http.Server{
 		Addr:    ":" + cfg.Port,
 		Handler: router,
 	}
 
-	// Start server
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Fatal("Failed to start server", zap.Error(err))
 		}
 	}()
 
-	// Wait for interrupt signal
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	// Graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -98,10 +91,8 @@ func setupRouter(cfg *config.Config, db *database.Database, logger *zap.Logger) 
 
 	router := gin.New()
 
-	// Recovery middleware
 	router.Use(gin.Recovery())
 
-	// Apply global middleware
 	router.Use(middleware.RequestID())
 	router.Use(middleware.Metrics())
 	router.Use(middleware.Logger(logger))
@@ -110,10 +101,8 @@ func setupRouter(cfg *config.Config, db *database.Database, logger *zap.Logger) 
 		middleware.NewIPRateLimiter(float64(cfg.RateLimit)/60.0, cfg.RateLimit),
 	))
 
-	// Metrics endpoint
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
-	// Health check endpoint
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":     "ok",
@@ -122,12 +111,10 @@ func setupRouter(cfg *config.Config, db *database.Database, logger *zap.Logger) 
 		})
 	})
 
-	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(db.DB, cfg.JWTSecret)
 	postHandler := handlers.NewPostHandler(db.DB)
 	commentHandler := handlers.NewCommentHandler(db.DB)
 
-	
 	api := router.Group("/api")
 	{
 		api.POST("/register", authHandler.Register)

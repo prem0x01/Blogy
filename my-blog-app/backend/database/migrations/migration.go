@@ -2,6 +2,7 @@ package migrations
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 type Migration struct {
@@ -65,4 +66,3 @@ func RunMigrations(db *sql.DB) error {
 
 	return nil
 }
-

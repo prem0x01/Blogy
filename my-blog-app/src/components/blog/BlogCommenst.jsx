@@ -3,11 +3,11 @@ import { useAuth } from '@/context/AuthContext'
 import { Button } from '../common/Button'
 import { Input } from '../common/Input'
 import { Avatar } from '../common/Avatar'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '../../lib/utils'
 import { Reply, ThumbsUp, MoreVertical, Edit, Trash2, AlertCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import MDEditor from '@uiw/react-md-editor'
-import api from '@/lib/api'
+import api from '../../lib/api'
 import { toast } from 'react-hot-toast'
 
 export function BlogComments({ postId }) {

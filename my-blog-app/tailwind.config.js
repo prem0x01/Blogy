@@ -25,6 +25,7 @@ module.exports = {
         },
         primary: colors.black,
         secondary: colors.gray,
+        
       },
       fontFamily: {
         sans: ['Inter var', 'sans-serif'],

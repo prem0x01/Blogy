@@ -17,7 +17,7 @@ import CreatePost from './pages/CreateBlog';
 import BlogPost from './pages/BlogDetails';
 
 // Components
-import Header from './components/layout/Header';
+import {Header} from './components/layout/Header';
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();

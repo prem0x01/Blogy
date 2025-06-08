@@ -1,8 +1,9 @@
 package models
 
 import (
-	"my-blog-app/backend/utils"
 	"time"
+
+	"github.com/prem0x01/Blogy/utils"
 )
 
 type Comment struct {

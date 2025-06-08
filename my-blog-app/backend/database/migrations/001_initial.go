@@ -1,7 +1,7 @@
 package migrations
 
 const initialSchema = `
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -10,7 +10,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE posts (
+CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE posts (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
     user_id INTEGER NOT NULL,

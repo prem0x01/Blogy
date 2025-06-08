@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	"my-blog-app/backend/models"
-
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/prem0x01/Blogy/models"
 )
 
 type Database struct {
 	*sql.DB
 }
-
 
 type Config struct {
 	MaxOpenConns    int
@@ -21,7 +19,6 @@ type Config struct {
 	ConnMaxLifetime time.Duration
 	ConnMaxIdleTime time.Duration
 }
-
 
 func NewDatabase(dbPath string, config *Config) (*Database, error) {
 	db, err := sql.Open("sqlite3", dbPath)
@@ -203,4 +200,3 @@ func (db *Database) GetUserByID(id int64) (*models.User, error) {
 	}
 	return user, err
 }
-

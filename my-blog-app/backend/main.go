@@ -9,13 +9,12 @@ import (
 	"syscall"
 	"time"
 
-	"my-blog-app/backend/config"
-	"my-blog-app/backend/database"
-	"my-blog-app/backend/database/migrations"
-	"my-blog-app/backend/handlers"
-	"my-blog-app/backend/middleware"
-
 	"github.com/gin-gonic/gin"
+	"github.com/prem0x01/Blogy/config"
+	"github.com/prem0x01/Blogy/database"
+	"github.com/prem0x01/Blogy/database/migrations"
+	"github.com/prem0x01/Blogy/handlers"
+	"github.com/prem0x01/Blogy/middleware"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 )

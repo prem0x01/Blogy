@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"my-blog-app/backend/utils"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/prem0x01/Blogy/utils"
 )
 
 func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
@@ -20,7 +19,6 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 			return
 		}
 
-		
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
 			utils.ErrorResponse(c, http.StatusUnauthorized, "Invalid authorization header format")
@@ -30,7 +28,6 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 
 		tokenString := parts[1]
 
-		
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -45,7 +42,7 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		}
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			
+
 			c.Set("user_id", int64(claims["user_id"].(float64)))
 			c.Next()
 		} else {

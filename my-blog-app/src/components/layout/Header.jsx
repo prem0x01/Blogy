@@ -10,6 +10,7 @@ export function Header() {
     const [isOpen, setIsOpen] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
     const [notifications, setNotifications] = useState([])
+    const [showNotifications, setShowNotifications] = useState(false)
     const { user, logout } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
@@ -57,7 +58,7 @@ export function Header() {
                     {/* Logo */}
                     <div className="flex items-center">
                         <Link to="/" className="text-xl font-bold">
-                            Blog<span className="text-primary">App</span>
+                            Blogy<span className="text-primary">App</span>
                         </Link>
                     </div>
 

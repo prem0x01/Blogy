@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { api } from '../lib/api';
-import BlogEditor from '../components/BlogEditor';
+import  api  from '../lib/api';
+import {MarkdownEditor} from '../components/editor/MarkdownEditor';
 
 export default function CreatePost() {
     const navigate = useNavigate();
@@ -88,7 +88,7 @@ export default function CreatePost() {
                 </AnimatePresence>
 
                 {/* Editor */}
-                <BlogEditor onSubmit={handleSubmit} />
+                <MarkdownEditor onSubmit={handleSubmit} />
 
                 {/* Writing Tips */}
                 <motion.div

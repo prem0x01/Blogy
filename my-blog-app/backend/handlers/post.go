@@ -6,10 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"my-blog-app/backend/models"
-	"my-blog-app/backend/utils"
-
 	"github.com/gin-gonic/gin"
+	"github.com/prem0x01/Blogy/models"
+	"github.com/prem0x01/Blogy/utils"
 )
 
 type PostHandler struct {
@@ -51,7 +50,6 @@ func (h *PostHandler) GetPost(c *gin.Context) {
 		return
 	}
 
-	
 	comments, err := h.getPostComments(id)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to fetch comments")
@@ -69,7 +67,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt64("user_id") 
+	userID := c.GetInt64("user_id")
 
 	post := &models.Post{
 		UserID:    userID,
@@ -100,7 +98,7 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt64("user_id") 
+	userID := c.GetInt64("user_id")
 
 	post := &models.Post{
 		ID:        id,
@@ -129,7 +127,7 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt64("user_id") 
+	userID := c.GetInt64("user_id")
 
 	if err := h.deletePost(postID, userID); err != nil {
 		if err == sql.ErrNoRows {
@@ -142,7 +140,6 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 
 	utils.SuccessResponse(c, gin.H{"message": "Post deleted successfully"})
 }
-
 
 func (h *PostHandler) getPosts(limit, offset int) ([]*models.Post, int64, error) {
 	var total int64

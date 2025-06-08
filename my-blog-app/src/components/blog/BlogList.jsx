@@ -5,7 +5,7 @@ import { BlogCard } from './BlogCard'
 import { Loading } from '../common/Loading'
 import api from '../../lib/api'
 
-export function BlogList({
+export default function BlogList({
     initialPosts = [],
     category = null,
     tag = null,

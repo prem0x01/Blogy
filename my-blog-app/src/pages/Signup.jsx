@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { api } from '../lib/api';
+import  api  from '../lib/api';
 
 export default function Register() {
   const navigate = useNavigate();

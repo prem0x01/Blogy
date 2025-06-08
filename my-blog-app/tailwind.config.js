@@ -10,43 +10,39 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Cream theme
-        cream: {
-          50: '#FDFBF7',
-          100: '#FAF7F2',
-          200: '#F5EEE4',
-          300: '#EFE5D7',
-          400: '#E9DBC9',
-          500: '#E4D2BC',
-          600: '#D9C0A3',
-          700: '#CFAE8A',
-          800: '#C49C71',
-          900: '#BA8A58',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
-        primary: colors.black,
-        secondary: colors.gray,
-        
-      },
-      fontFamily: {
-        sans: ['Inter var', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.5s ease-in-out',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
       },
     },
   },
+
   plugins: [
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),

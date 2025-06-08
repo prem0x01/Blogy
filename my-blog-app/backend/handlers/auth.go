@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"my-blog-app/backend/models"
-	"my-blog-app/backend/utils"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/prem0x01/Blogy/models"
+	"github.com/prem0x01/Blogy/utils"
 )
 
 type AuthHandler struct {
@@ -240,4 +239,3 @@ func (h *AuthHandler) getUserByEmail(email string) (*models.User, error) {
 	)
 	return user, err
 }
-

@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { useAuth } from '../context/AuthContext';
-import { api } from '../lib/api';
-import BlogComments from '../components/blog/BlogCommenst';
+import  api  from '../lib/api';
+import {BlogComments} from '../components/blog/BlogCommenst';
 
 export default function BlogPost() {
     const { id } = useParams();

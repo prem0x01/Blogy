@@ -30,7 +30,9 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Create indexes
-CREATE INDEX IF NOT EXISTS idx_posts_author ON posts(author_id);
+
+-- Corrected indexes
+CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user_id);
 CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post_id);
-CREATE INDEX IF NOT EXISTS idx_comments_author ON comments(author_id);
+CREATE INDEX IF NOT EXISTS idx_comments_user ON comments(user_id);
+CREATE INDEX IF NOT EXISTS idx_likes_user_id ON likes(user_id);

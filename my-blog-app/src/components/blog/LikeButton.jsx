@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Heart } from 'lucide-react'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '../../context/AuthContext'
 import { Button } from '../common/Button'
-import api from '@/lib/api'
+import api from '../../lib/api'
 import { toast } from 'react-hot-toast'
 
 export function LikeButton({
@@ -157,4 +157,4 @@ function LikeButtonWithTooltip(props) {
     )
 }
 
-export { LikeButton, LikeButtonWithTooltip }
+export { LikeButtonWithTooltip }

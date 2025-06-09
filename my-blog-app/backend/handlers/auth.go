@@ -79,6 +79,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 
 func (h *AuthHandler) Login(c *gin.Context) {
 	var input struct {
+		Username string `json:"username" validate:"required,username"`
 		Email    string `json:"email" validate:"required,email"`
 		Password string `json:"password" validate:"required"`
 	}
@@ -88,7 +89,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	user, err := h.getUserByEmail(input.Email)
+	user, err := h.getUserByUsernameAndEmail(input.Username, input.Email)
 	if err == sql.ErrNoRows {
 		utils.ErrorResponse(c, http.StatusUnauthorized, "Invalid credentials")
 		return
@@ -222,14 +223,14 @@ func (h *AuthHandler) createUser(user *models.User) error {
 	return nil
 }
 
-func (h *AuthHandler) getUserByEmail(email string) (*models.User, error) {
+func (h *AuthHandler) getUserByUsernameAndEmail(username, email string) (*models.User, error) {
 	user := &models.User{}
 	query := `
 		SELECT id, username, email, password_hash, created_at, updated_at
 		FROM users
-		WHERE email = ?
+		WHERE username = ? email = ?
 	`
-	err := h.db.QueryRow(query, email).Scan(
+	err := h.db.QueryRow(query, username, email).Scan(
 		&user.ID,
 		&user.Username,
 		&user.Email,
@@ -237,5 +238,8 @@ func (h *AuthHandler) getUserByEmail(email string) (*models.User, error) {
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)
+	if err != nil {
+		return nil, err
+	}
 	return user, err
 }

@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
+	"unicode"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -18,9 +20,31 @@ func init() {
 
 func validatePassword(fl validator.FieldLevel) bool {
 	password := fl.Field().String()
+	fmt.Println("Password Validation Triggered:", password) // debug log
+	var (
+		hasMinLen  = false
+		hasUpper   = false
+		hasLower   = false
+		hasNumber  = false
+		hasSpecial = false
+	)
+	if len(password) >= 8 {
+		hasMinLen = true
+	}
+	for _, char := range password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		case unicode.IsNumber(char):
+			hasNumber = true
+		case unicode.IsPunct(char) || unicode.IsSymbol(char):
+			hasSpecial = true
+		}
+	}
 
-	match, _ := regexp.MatchString(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$`, password)
-	return match
+	return hasMinLen && hasUpper && hasLower && hasNumber && hasSpecial
 }
 
 func validateUsername(fl validator.FieldLevel) bool {
@@ -58,4 +82,3 @@ func FormatValidationErrors(err error) string {
 	}
 	return "validation error"
 }
-

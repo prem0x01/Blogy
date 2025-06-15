@@ -55,7 +55,7 @@ in backed there are three models
 
            ``` match, _ := regexp.MatchString(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$`, password)```
 
-   so I searched on stackoverflow and find out that this shit dont work properly so I needed to write custom validator
+   so I searched on stackoverflow and find out that this dont work properly so I needed to write custom validator
 
   ``` func validatePassword(fl validator.FieldLevel) bool {
 	    password := fl.Field().String()
